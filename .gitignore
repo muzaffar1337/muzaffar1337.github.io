@@ -1,0 +1,17 @@
+_site/
+
+.jekyll-cache/
+.sass-cache/
+
+.jekyll-metadata
+
+.bundle/
+vendor/
+CLAUDE.md
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+

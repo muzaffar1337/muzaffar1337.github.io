@@ -1,0 +1,57 @@
+# Site Settings
+title: muzaffar1337
+tagline: Security Researcher
+description: "Security Researcher"
+author: Mudhafar Wadullah Sultan
+url: "https://muzaffar1337.github.io"
+baseurl: ""
+
+# Social Links
+social:
+  github: muzaffar1337
+  twitter: muzaffar1337
+  linkedin: muzaffar1337
+  hackthebox: "https://app.hackthebox.com/users/1438706"
+  email: cymzfr@gmail.com
+
+# Build Settings
+markdown: kramdown
+highlighter: rouge
+permalink: /blog/:title/
+
+# Sass
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from build
+exclude:
+  - CLAUDE.md
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /blog/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+    values:
+      layout: "default"

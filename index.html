@@ -1,0 +1,36 @@
+---
+layout: default
+title: Posts
+---
+<div class="posts-page">
+  <header class="posts-page__header">
+    <h1 class="posts-page__title">Posts</h1>
+    <p class="posts-page__description">Writeups, research, and thoughts.</p>
+  </header>
+
+  {% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+
+  {% for year in posts_by_year %}
+  <div class="posts-year">
+    <h2 class="posts-year__title">{{ year.name }}</h2>
+    <ul class="posts-list">
+      {% for post in year.items %}
+      <li class="post-item">
+        <a href="{{ post.url | relative_url }}" class="post-item__link">
+          <span class="post-item__title">{{ post.title }}</span>
+          <span class="post-item__date">{{ post.date | date: "%d %b" }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+
+  {% if site.posts.size == 0 %}
+  <p style="color: #94a3b8; text-align: center; padding: 3rem 0;">No posts yet. Coming soon...</p>
+  {% endif %}
+
+  <footer class="footer">
+    &copy; {{ 'now' | date: "%Y" }} muzaffar1337
+  </footer>
+</div>
